@@ -13,11 +13,36 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun hasWriteExternalStoragePermission() =
-        ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+        ActivityCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
 
     private fun hasForegroundLocationPermission() =
-        ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        ActivityCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
 
     private fun hasBackgroundLocationPermission() =
-        ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
+        ActivityCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+    private fun requestPermissions() {
+        val permissionsList = mutableListOf<String>()
+        if (!hasWriteExternalStoragePermission()) {
+            permissionsList.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+        if (!hasForegroundLocationPermission()) {
+            permissionsList.add(android.Manifest.permission.ACCESS_COARSE_LOCATION)
+        }
+        if (!hasBackgroundLocationPermission()) {
+            permissionsList.add(android.Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+        }
+        if (permissionsList.isNotEmpty()) {
+            ActivityCompat.requestPermissions(this, permissionsList.toTypedArray(), 0)
+        }
+    }
 }

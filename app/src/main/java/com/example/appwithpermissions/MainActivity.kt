@@ -3,6 +3,8 @@ package com.example.appwithpermissions
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
 import androidx.core.app.ActivityCompat
 import java.util.jar.Manifest
 
@@ -10,6 +12,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val requestButton = findViewById<Button>(R.id.btn_requestPermission)
+        requestButton.setOnClickListener{
+            requestPermissions()
+        }
     }
 
     private fun hasWriteExternalStoragePermission() =
@@ -44,5 +50,22 @@ class MainActivity : AppCompatActivity() {
         if (permissionsList.isNotEmpty()) {
             ActivityCompat.requestPermissions(this, permissionsList.toTypedArray(), 0)
         }
+
     }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode == 0 && grantResults.isNotEmpty()){
+            for(i in grantResults.indices){
+                if(grantResults[i] == PackageManager.PERMISSION_GRANTED){
+                    Log.d("PermissionsRequest","${permissions[i]} granted")
+                }
+            }
+        }
+    }
+
 }
